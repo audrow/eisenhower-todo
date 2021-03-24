@@ -39,6 +39,49 @@ router.post('/add-todo', async (ctx, next) => {
   }
 })
 
+router.post('/update-todo/:todoId', async (ctx) => {
+  const id = ctx.params.todoId
+  const todo = todos.find(todo => todo.id === id)
+  if (!todo) {
+    throw new Error('Did not find todo')
+  }
+
+  const updatedTodoTitle = (await ctx.request.body({type: "form"}).value).get('update-todo')
+
+  if (updatedTodoTitle && updatedTodoTitle.trim().length !== 0) {
+    todo.name = updatedTodoTitle
+    ctx.response.redirect('/')
+  } else {
+    const body = await renderFileToString(Deno.cwd() + '/views/todo.ejs', {
+      todoText: todo.name,
+      todoId: todo.id,
+      error: "Field cannot be empty",
+    })
+    ctx.response.body = body
+  }
+})
+
+router.post('/delete-todo/:todoId', ctx => {
+  const id = ctx.params.todoId
+  todos = todos.filter(todo => todo.id !== id)
+  ctx.response.redirect('/')
+})
+
+router.get('/todo/:todoId', async (ctx) => {
+  const id = ctx.params.todoId
+
+  const todo = todos.find(todo => todo.id === id)
+  if (!todo) {
+    throw new Error('Did not find todo')
+  }
+  const body = await renderFileToString(Deno.cwd()+'/views/todo.ejs', {
+    todoText: todo.name,
+    todoId: todo.id,
+    error: null,
+  })
+  ctx.response.body = body
+})
+
 router.get('/about', (ctx, next) => {
   ctx.response.body = `<h1>about</h1>`
   ctx.response.type = 'text/html'
