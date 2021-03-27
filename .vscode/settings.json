@@ -3,6 +3,7 @@
   "deno.unstable": true,
   "deno.lint": true,
   "cSpell.words": [
+    "Bson",
     "todos"
   ]
 }

@@ -17,9 +17,18 @@ router.get('/', async (ctx, next) => {
 })
 
 router.post('/add-todo', async (ctx, next) => {
-  const newTodoTitle = (await ctx.request.body({type: "form"}).value).get('new-todo')
+  const form = await ctx.request.body({type: "form"}).value
+
+  const newTodoTitle = form.get('new-todo')
+  const isImportant: boolean = form.get('is-important') === "true"
+  const isUrgent: boolean = form.get('is-urgent') === "true"
+
   if(newTodoTitle && newTodoTitle.trim().length !== 0) {
-    const newTodo = { name: newTodoTitle! }
+    const newTodo = { 
+      name: newTodoTitle!,
+      isImportant: isImportant!,
+      isUrgent: isUrgent!,
+    }
     await getTodosCollection().insertOne(newTodo)
     ctx.response.redirect('/')
   } else {
@@ -40,15 +49,21 @@ router.post('/update-todo/:todoId', async (ctx) => {
     throw new Error('Did not find todo')
   }
 
-  const updatedTodoTitle = (await ctx.request.body({type: "form"}).value).get('update-todo')
+  const form = await ctx.request.body({type: "form"}).value
+  const updatedTodoTitle = form.get('update-todo')
+  const isImportant: boolean = form.get('is-important') === "true"
+  const isUrgent: boolean = form.get('is-urgent') === "true"
+
   if (updatedTodoTitle && updatedTodoTitle.trim().length !== 0) {
-    todo!.name = updatedTodoTitle
-    await getTodosCollection().updateOne({_id: id}, {$set: {name: updatedTodoTitle}})
+    await getTodosCollection().updateOne({_id: id}, {$set: {
+      name: updatedTodoTitle!,
+      isImportant: isImportant,
+      isUrgent: isUrgent,
+    }})
     ctx.response.redirect('/')
   } else {
     const body = await renderFileToString(Deno.cwd() + '/views/todo.ejs', {
-      todoText: todo!.name,
-      todoId: todo!._id,
+      todo: todo!,
       error: "Field cannot be empty",
     })
     ctx.response.body = body
@@ -68,8 +83,7 @@ router.get('/todo/:todoId', async (ctx) => {
     throw new Error('Did not find todo')
   }
   const body = await renderFileToString(Deno.cwd()+'/views/todo.ejs', {
-    todoText: todo!.name,
-    todoId: todo!._id,
+    todo: todo!,
     error: null,
   })
   ctx.response.body = body

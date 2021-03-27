@@ -17,6 +17,10 @@
   </h1>
   <form class="form-inline" action="/add-todo" method="POST">
     <input type="text" class="form-control mb-2 mr-sm-2" name="new-todo">
+    <input type="checkbox" class="form-control mb-2 mr-sm-2" name="is-important" value="true">
+    <label for="is-important">Important?</label>
+    <input type="checkbox" class="form-control mb-2 mr-sm-2" name="is-urgent" value="true">
+    <label for="is-urgent">Urgent?</label>
     <button type="submit" class="btn btn-primary mb-2">
       Add Todo
     </button>
@@ -32,8 +36,22 @@
     <% for (todo of todos) { %>
       <a href="/todo/<%= todo._id %>">
         <li class="list-group-item d-flex justify-content-between align-items-center">
-          <%= todo.name %>
-          <form action='/delete-todo/<%= todo._id %>' method="POST">
+          <div>
+            <%= todo.name %>
+          </div>
+          <div>
+            <% if (todo.isImportant) { %>
+              important,
+            <% } else { %>
+              not important,
+            <% } %>
+            <% if (todo.isUrgent) { %>
+              urgent
+            <% } else { %>
+              not Urgent
+            <% } %>
+          </div>
+          <form action="/delete-todo/<%= todo._id %>" method="POST">
             <button type="submit" class="btn btn-primary mb-2">
               Delete
             </button>
