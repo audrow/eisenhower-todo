@@ -3,9 +3,9 @@ TODO
 
 Short term
 ----------
+*[x] Layer templates to reduce redundant HTML
 *[ ] Make columns
   *[ ] Make columns work with different view widths
-*[ ] Layer templates to reduce redundant HTML
 *[ ] Make things better looking
 
 Medium term
