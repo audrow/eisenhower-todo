@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<%- await include("./views/layout/head.ejs", {title: todo.name}) %> 
+<head>
+  <%- await include("./views/layout/head.ejs", {title: todo.name}) %> 
+</head>
 
-<%- await include("./views/layout/header.ejs") %> 
+<header>
+  <%- await include("./views/layout/header.ejs") %> 
+</header>
 
 <body>
   <form class="form-inline" action="/update-todo/<%= todo._id %>" method="POST">
@@ -35,6 +39,8 @@
 
 </body>
 
-<%- await include("./views/layout/footer.ejs") %> 
+<footer>
+  <%- await include("./views/layout/footer.ejs") %> 
+</footer>
 
 </html>
