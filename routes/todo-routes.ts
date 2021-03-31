@@ -7,7 +7,7 @@ const router = new Router()
 
 router.get('/', async (ctx, next) => {
   const todos = await getTodosCollection().find().toArray()
-  const body = await renderFileToString(Deno.cwd() + '/views/todos.ejs', 
+  const body = await renderFileToString(Deno.cwd() + '/views/pages/todos.ejs', 
     { 
       title: 'My Todos',
       todos: todos,
@@ -33,7 +33,7 @@ router.post('/add-todo', async (ctx, next) => {
     ctx.response.redirect('/')
   } else {
     const todos = await getTodosCollection().find().toArray()
-    const body = await renderFileToString(Deno.cwd() + '/views/todos.ejs', {
+    const body = await renderFileToString(Deno.cwd() + '/views/pages/todos.ejs', {
       title: 'My Todos',
       todos: todos,
       error: "Field cannot be empty"
@@ -62,7 +62,7 @@ router.post('/update-todo/:todoId', async (ctx) => {
     }})
     ctx.response.redirect('/')
   } else {
-    const body = await renderFileToString(Deno.cwd() + '/views/todo.ejs', {
+    const body = await renderFileToString(Deno.cwd() + '/views/pages/todo.ejs', {
       todo: todo!,
       error: "Field cannot be empty",
     })
@@ -82,7 +82,7 @@ router.get('/todo/:todoId', async (ctx) => {
   if (!todo) {
     throw new Error('Did not find todo')
   }
-  const body = await renderFileToString(Deno.cwd()+'/views/todo.ejs', {
+  const body = await renderFileToString(Deno.cwd()+'/views/pages/todo.ejs', {
     todo: todo!,
     error: null,
   })

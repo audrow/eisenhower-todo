@@ -1,0 +1,53 @@
+.matrix-2d {
+  display: grid;
+  grid-template-columns: minmax(100px, auto) 1fr 1fr;
+  grid-template-areas:
+    ".   l11 l12"
+    "l21 c11 c12"
+    "l22 c21 c22";
+}
+
+.label-top {
+  padding: 1em 0 1em 1em;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+}
+.label-left {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 1em 1em 1em 0;
+}
+.label-1-1 {
+  grid-area: l11;
+}
+.label-1-2 {
+  grid-area: l12;
+}
+.label-2-1 {
+  grid-area: l21;
+}
+.label-2-2 {
+  grid-area: l22;
+}
+
+.content {
+  padding: 1em;
+}
+.content-1-1 {
+  grid-area: c11;
+  background-color: lightgreen;
+}
+.content-1-2 {
+  grid-area: c12;
+  background-color: lightpink;
+}
+.content-2-1 {
+  grid-area: c21;
+  background-color: lightblue;
+}
+.content-2-2 {
+  grid-area: c22;
+  background-color: lightgray;
+}

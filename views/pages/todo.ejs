@@ -2,11 +2,11 @@
 <html lang="en">
 
 <head>
-  <%- await include("./views/layout/head.ejs", {title: todo.name}) %> 
+  <%- await include("./views/partials/head.ejs", {title: todo.name}) %> 
 </head>
 
 <header>
-  <%- await include("./views/layout/header.ejs") %> 
+  <%- await include("./views/partials/header.ejs") %> 
 </header>
 
 <body>
@@ -40,7 +40,7 @@
 </body>
 
 <footer>
-  <%- await include("./views/layout/footer.ejs") %> 
+  <%- await include("./views/partials/footer.ejs") %> 
 </footer>
 
 </html>
