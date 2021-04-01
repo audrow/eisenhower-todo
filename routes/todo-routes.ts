@@ -70,6 +70,18 @@ router.post('/update-todo/:todoId', async (ctx) => {
   }
 })
 
+router.post('/mark-todo-as-complete/:todoId', async ctx => {
+  const id = new Bson.ObjectId(ctx.params.todoId!)
+  await getTodosCollection().updateOne({_id: id}, {$set: { isComplete: true }})
+  ctx.response.redirect('/')
+})
+
+router.post('/mark-todo-as-incomplete/:todoId', async ctx => {
+  const id = new Bson.ObjectId(ctx.params.todoId!)
+  await getTodosCollection().updateOne({_id: id}, {$set: { isComplete: false }})
+  ctx.response.redirect('/')
+})
+
 router.post('/delete-todo/:todoId', async ctx => {
   const id = new Bson.ObjectId(ctx.params.todoId!)
   await getTodosCollection().deleteOne({_id: id})
