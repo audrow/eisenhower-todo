@@ -1,4 +1,4 @@
-import { Router } from "https://deno.land/x/oak/mod.ts"
+import { Router, send } from "https://deno.land/x/oak/mod.ts"
 import { renderFileToString } from "https://deno.land/x/dejs/mod.ts"
 import { Bson } from "https://deno.land/x/mongo@v0.22.0/mod.ts";
 import getTodosCollection from "../helper/dbs.ts"
@@ -76,6 +76,7 @@ router.post('/mark-todo-as-complete/:todoId', async ctx => {
   ctx.response.redirect('/')
 })
 
+
 router.post('/mark-todo-as-incomplete/:todoId', async ctx => {
   const id = new Bson.ObjectId(ctx.params.todoId!)
   await getTodosCollection().updateOne({_id: id}, {$set: { isComplete: false }})
@@ -86,6 +87,12 @@ router.post('/delete-todo/:todoId', async ctx => {
   const id = new Bson.ObjectId(ctx.params.todoId!)
   await getTodosCollection().deleteOne({_id: id})
   ctx.response.redirect('/')
+})
+
+router.get('/assets/:path+', async (ctx) => {
+  await send(ctx, ctx.request.url.pathname, {
+    root: Deno.cwd(),
+  })
 })
 
 router.get('/todo/:todoId', async (ctx) => {
