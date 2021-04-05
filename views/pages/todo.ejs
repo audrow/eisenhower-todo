@@ -26,6 +26,12 @@
       >
       <label for="is-urgent">Urgent?</label>
     </div>
+    <div>
+      <input type="checkbox" class="form-control mb-2 mr-sm-2" name="is-complete" value="true"
+       <% if (todo.isComplete) { %> checked <% } %> 
+      >
+      <label for="is-complete">Done?</label>
+    </div>
     <button type="submit" class="btn btn-primary mb-2">
       Update Todo
     </button>

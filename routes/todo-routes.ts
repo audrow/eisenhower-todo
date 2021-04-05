@@ -56,12 +56,14 @@ router.post('/update-todo/:todoId', async (ctx) => {
   const updatedTodoTitle = form.get('update-todo')
   const isImportant: boolean = form.get('is-important') === "true"
   const isUrgent: boolean = form.get('is-urgent') === "true"
+  const isComplete: boolean = form.get('is-complete') === "true"
 
   if (updatedTodoTitle && updatedTodoTitle.trim().length !== 0) {
     await getTodosCollection().updateOne({_id: id}, {$set: {
       name: updatedTodoTitle!,
       isImportant,
       isUrgent,
+      isComplete,
     }})
     ctx.response.redirect('/')
   } else {
