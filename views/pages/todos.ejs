@@ -28,6 +28,16 @@
     </div>
   <% } %> 
 
+    <form class="form-inline" action="/toggle-hide-done-todos" method="POST">
+      <button type="submit" class="btn btn-primary mb-2">
+        <% if (isShowDoneTodos) { %> 
+          Hide done
+        <% } else { %> 
+          Show done
+        <% } %> 
+      </button>
+    </form>
+
   <div class="matrix-2d">
     <div class="label-top label-1-1">
       Important
@@ -44,21 +54,25 @@
     <div class="content content-1-1">
       <%- await include('./views/partials/todo-list.ejs', {
         todos: todos.filter(todo => todo.isImportant && todo.isUrgent),
+        isShowDoneTodos
       }) %> 
     </div>
     <div class="content content-1-2">
       <%- await include('./views/partials/todo-list.ejs', {
         todos: todos.filter(todo => !todo.isImportant && todo.isUrgent),
+        isShowDoneTodos
       }) %> 
     </div>
     <div class="content content-2-1">
       <%- await include('./views/partials/todo-list.ejs', {
         todos: todos.filter(todo => todo.isImportant && !todo.isUrgent),
+        isShowDoneTodos
       }) %> 
     </div>
     <div class="content content-2-2">
       <%- await include('./views/partials/todo-list.ejs', {
         todos: todos.filter(todo => !todo.isImportant && !todo.isUrgent),
+        isShowDoneTodos
       }) %> 
     </div>
   </div>

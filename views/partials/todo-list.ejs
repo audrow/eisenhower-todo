@@ -1,5 +1,5 @@
 <ul class="list-group">
-  <% for (todo of todos) { %>
+  <% for (todo of todos) { if (isShowDoneTodos || !todo.isComplete) { %>
     <a href="/todo/<%= todo._id %>">
       <li class="list-group-item d-flex justify-content-between align-items-center">
         <% if (todo.isComplete) { %> 
@@ -17,5 +17,5 @@
         </div>
       </li>
     </a>
-    <% } %>
+    <% }} %>
 </ul>

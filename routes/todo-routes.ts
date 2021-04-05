@@ -4,13 +4,15 @@ import { Bson } from "https://deno.land/x/mongo@v0.22.0/mod.ts";
 import getTodosCollection from "../helper/dbs.ts"
 
 const router = new Router()
+let isShowDoneTodos = false;
 
 router.get('/', async (ctx, next) => {
   const todos = await getTodosCollection().find().toArray()
   const body = await renderFileToString(Deno.cwd() + '/views/pages/todos.ejs', 
     { 
       title: 'My Todos',
-      todos: todos,
+      todos,
+      isShowDoneTodos,
       error: null,
     })
   ctx.response.body = body
@@ -35,7 +37,8 @@ router.post('/add-todo', async (ctx, next) => {
     const todos = await getTodosCollection().find().toArray()
     const body = await renderFileToString(Deno.cwd() + '/views/pages/todos.ejs', {
       title: 'My Todos',
-      todos: todos,
+      todos,
+      isShowDoneTodos,
       error: "Field cannot be empty"
     })
     ctx.response.body = body
@@ -57,8 +60,8 @@ router.post('/update-todo/:todoId', async (ctx) => {
   if (updatedTodoTitle && updatedTodoTitle.trim().length !== 0) {
     await getTodosCollection().updateOne({_id: id}, {$set: {
       name: updatedTodoTitle!,
-      isImportant: isImportant,
-      isUrgent: isUrgent,
+      isImportant,
+      isUrgent,
     }})
     ctx.response.redirect('/')
   } else {
@@ -76,10 +79,14 @@ router.post('/mark-todo-as-complete/:todoId', async ctx => {
   ctx.response.redirect('/')
 })
 
-
 router.post('/mark-todo-as-incomplete/:todoId', async ctx => {
   const id = new Bson.ObjectId(ctx.params.todoId!)
   await getTodosCollection().updateOne({_id: id}, {$set: { isComplete: false }})
+  ctx.response.redirect('/')
+})
+
+router.post('/toggle-hide-done-todos', ctx => {
+  isShowDoneTodos = !isShowDoneTodos
   ctx.response.redirect('/')
 })
 
