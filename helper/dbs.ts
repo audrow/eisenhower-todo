@@ -7,6 +7,9 @@ interface TodoSchema {
   isComplete: boolean,
   isImportant: boolean,
   isUrgent: boolean,
+  createdDate: Date,
+  modifiedDate: Date,
+  completedDate: undefined | Date,
 }
 
 let todosCollection: Collection<TodoSchema>

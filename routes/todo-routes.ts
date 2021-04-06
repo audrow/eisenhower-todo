@@ -24,12 +24,17 @@ router.post('/add-todo', async (ctx, next) => {
   const newTodoTitle = form.get('new-todo')
   const isImportant: boolean = form.get('is-important') === "true"
   const isUrgent: boolean = form.get('is-urgent') === "true"
+  const creationDate = new Date()
 
   if(newTodoTitle && newTodoTitle.trim().length !== 0) {
     const newTodo = { 
       name: newTodoTitle!,
       isImportant: isImportant!,
       isUrgent: isUrgent!,
+      isCompleted: false,
+      creationDate: creationDate,
+      modifiedDate: creationDate,
+      completedDate: undefined,
     }
     await getTodosCollection().insertOne(newTodo)
     ctx.response.redirect('/')
@@ -59,12 +64,23 @@ router.post('/update-todo/:todoId', async (ctx) => {
   const isComplete: boolean = form.get('is-complete') === "true"
 
   if (updatedTodoTitle && updatedTodoTitle.trim().length !== 0) {
+    const currentDate = new Date
     await getTodosCollection().updateOne({_id: id}, {$set: {
       name: updatedTodoTitle!,
       isImportant,
       isUrgent,
       isComplete,
+      modifiedDate: currentDate,
     }})
+    if (isComplete) {
+      await getTodosCollection().updateOne({_id: id}, {$set: {
+        completedDate: currentDate,
+      }})
+    } else {
+      await getTodosCollection().updateOne({_id: id}, {$unset: {
+        completedDate: "",
+      }})
+    }
     ctx.response.redirect('/')
   } else {
     const body = await renderFileToString(Deno.cwd() + '/views/pages/todo.ejs', {
@@ -77,13 +93,26 @@ router.post('/update-todo/:todoId', async (ctx) => {
 
 router.post('/mark-todo-as-complete/:todoId', async ctx => {
   const id = new Bson.ObjectId(ctx.params.todoId!)
-  await getTodosCollection().updateOne({_id: id}, {$set: { isComplete: true }})
+  const currentDate = new Date()
+  await getTodosCollection().updateOne({_id: id}, {$set: { 
+    isComplete: true ,
+    completedDate: currentDate,
+    modifiedDate: currentDate,
+  }})
   ctx.response.redirect('/')
 })
 
 router.post('/mark-todo-as-incomplete/:todoId', async ctx => {
   const id = new Bson.ObjectId(ctx.params.todoId!)
-  await getTodosCollection().updateOne({_id: id}, {$set: { isComplete: false }})
+  await getTodosCollection().updateOne({_id: id}, {
+    $set: { 
+      isComplete: false ,
+      modifiedDate: new Date(),
+    }, 
+    $unset: {
+      completedDate: "",
+    },
+  })
   ctx.response.redirect('/')
 })
 
