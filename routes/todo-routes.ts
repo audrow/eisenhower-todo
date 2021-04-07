@@ -31,7 +31,7 @@ router.post('/add-todo', async (ctx, next) => {
       name: newTodoTitle!,
       isImportant: isImportant!,
       isUrgent: isUrgent!,
-      isCompleted: false,
+      isComplete: false,
       creationDate: creationDate,
       modifiedDate: creationDate,
       completedDate: undefined,
