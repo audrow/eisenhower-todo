@@ -7,7 +7,8 @@ const router = new Router()
 let isShowDoneTodos = false;
 
 router.get('/', async (ctx, next) => {
-  const todos = await getTodosCollection().find().toArray()
+  const todos = await getTodosCollection().aggregate(
+    [{$sort: {isComplete: 1, modifiedDate: -1}}]).toArray()
   const body = await renderFileToString(Deno.cwd() + '/views/pages/todos.ejs', 
     { 
       title: 'My Todos',
