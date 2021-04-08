@@ -30,7 +30,9 @@
     <div>
       <label for="due-date">Due date:</label>
       <input type="date" id="due-date" name="due-date"
-        <% if (todoDueDate) { %> value="<%- todoDueDate %>" <% } %>
+        <% if (todo.dueDate) { %> 
+          value="<%- todo.dueDate.toISOString().split("T")[0] %>" 
+        <% } %>
       >
     </div>
 

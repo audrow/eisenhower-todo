@@ -148,11 +148,8 @@ router.get('/todo/:todoId', async (ctx) => {
   if (!todo) {
     throw new Error('Did not find todo')
   }
-  const todoDueDate = todo.dueDate ? 
-    todo.dueDate.toISOString().split("T")[0] : undefined
   const body = await renderFileToString(Deno.cwd()+'/views/pages/todo.ejs', {
     todo: todo!,
-    todoDueDate: todoDueDate,
     error: null,
   })
   ctx.response.body = body
