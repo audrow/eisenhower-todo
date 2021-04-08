@@ -9,7 +9,11 @@ Short term
 *[x] Toggle hide done todos
 *[x] Add additional information to todos, like creation date and modified date
 *[x] Sort by done and modified date
-*[ ] Add a due date optional field
+*[x] Add a due date optional field
+*[ ] Show overdue tasks
+*[ ] Allow deletion from the todo list editing screen
+*[ ] Add labels
+*[ ] Filter displayed tasks by labels
 
 Medium term
 -----------
