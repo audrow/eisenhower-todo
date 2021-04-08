@@ -8,12 +8,13 @@ Short term
 *[x] Add a done check box
 *[x] Toggle hide done todos
 *[x] Add additional information to todos, like creation date and modified date
-*[ ] Sort by done and modified date
-*[ ] Add tags, such as "Open Robotics" to todos - and allow filtering
-*[ ] Store list order in the database
+*[x] Sort by done and modified date
+*[ ] Add a due date optional field
 
 Medium term
 -----------
+*[ ] Add tags, such as "Open Robotics" to todos - and allow filtering
+*[ ] Store list order in the database
 *[ ] Make columns work with different view widths
 *[ ] Allow todos to be reordered
 *[ ] Make todos dragable between lists
