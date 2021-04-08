@@ -10,28 +10,30 @@
 </header>
 
 <body>
-  <form class="form-inline" action="/update-todo/<%= todo._id %>" method="POST">
+  <form action="/update-todo/<%= todo._id %>" method="POST">
     <input 
-      type="text" class="form-control mb-2 mr-sm-2" 
-      name="update-todo" value="<%= todo.name %>">
+      type="text" name="update-todo" value="<%= todo.name %>">
     <div>
-      <input type="checkbox" class="form-control mb-2 mr-sm-2" name="is-important" value="true"
+      <input type="checkbox" name="is-important" value="true"
        <% if (todo.isImportant) { %> checked <% } %> 
       >
       <label for="is-important">Important?</label>
-    </div>
-    <div>
-      <input type="checkbox" class="form-control mb-2 mr-sm-2" name="is-urgent" value="true"
+      <input type="checkbox" name="is-urgent" value="true"
        <% if (todo.isUrgent) { %> checked <% } %> 
       >
       <label for="is-urgent">Urgent?</label>
-    </div>
-    <div>
-      <input type="checkbox" class="form-control mb-2 mr-sm-2" name="is-complete" value="true"
+      <input type="checkbox" name="is-complete" value="true"
        <% if (todo.isComplete) { %> checked <% } %> 
       >
       <label for="is-complete">Done?</label>
     </div>
+    <div>
+      <label for="due-date">Due date:</label>
+      <input type="date" id="due-date" name="due-date"
+        <% if (todoDueDate) { %> value="<%- todoDueDate %>" <% } %>
+      >
+    </div>
+
     <button type="submit" class="btn btn-primary mb-2">
       Update Todo
     </button>

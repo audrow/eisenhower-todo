@@ -2,11 +2,17 @@
   <% for (todo of todos) { if (isShowDoneTodos || !todo.isComplete) { %>
     <a href="/todo/<%= todo._id %>">
       <li class="list-group-item d-flex justify-content-between align-items-center">
-        <% if (todo.isComplete) { %> 
-          <div> <%= todo.name %> (DONE) </div>
-        <% } else { %> 
-          <div> <%= todo.name %> </div>
-        <% } %> 
+        <div>
+          <%= todo.name %>
+          <div>
+            <% if (todo.isComplete) { %> 
+              (DONE)
+              <%= todo.completedDate.toISOString().split("T")[0] %> 
+            <% } else if (todo.dueDate) { %> 
+              <%= todo.dueDate.toISOString().split("T")[0] %> 
+            <% } %> 
+          </div>
+        </div>
         <div>
           <%- await include("./views/partials/todo-complete-button.ejs", { todo: todo }) %> 
           <form action="/delete-todo/<%= todo._id %>" method="POST">

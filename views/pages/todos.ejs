@@ -11,16 +11,27 @@
 </header>
 
 <body>
-  <form class="form-inline" action="/add-todo" method="POST">
-    <input type="text" class="form-control mb-2 mr-sm-2" name="new-todo">
-    <input type="checkbox" class="form-control mb-2 mr-sm-2" name="is-important" value="true">
-    <label for="is-important">Important?</label>
-    <input type="checkbox" class="form-control mb-2 mr-sm-2" name="is-urgent" value="true">
-    <label for="is-urgent">Urgent?</label>
+  <hr>
+  <form action="/add-todo" method="POST">
+    <div>
+      <label for="new-todo">Todo name:</label>
+      <input type="text" name="new-todo">
+    </div>
+    <div>
+      <input type="checkbox" name="is-important" value="true">
+      <label for="is-important">Important?</label>
+      <input type="checkbox" name="is-urgent" value="true">
+      <label for="is-urgent">Urgent?</label>
+    </div>
+    <div>
+      <label for="due-date">Due date:</label>
+      <input type="date" id="due-date" name="due-date">
+    </div>
     <button type="submit" class="btn btn-primary mb-2">
       Add Todo
     </button>
   </form>
+  <hr>
 
   <% if (error) { %> 
     <div class="alert alert-danger" role="alert">
