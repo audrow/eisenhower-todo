@@ -11,7 +11,7 @@ Short term
 *[x] Sort by done and modified date
 *[x] Add a due date optional field
 *[x] Allow deletion from the todo list editing screen
-*[ ] Show overdue tasks
+*[x] Show overdue tasks
 *[ ] Add labels
 *[ ] Filter displayed tasks by labels
 

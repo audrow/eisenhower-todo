@@ -6,9 +6,12 @@
           <%= todo.name %>
           <div>
             <% if (todo.isComplete) { %> 
-              (DONE)
+              DONE on 
               <%= todo.completedDate.toISOString().split("T")[0] %> 
             <% } else if (todo.dueDate) { %> 
+              <% if (new Date > todo.dueDate) { %> 
+                (Overdue)
+              <% } %> 
               <%= todo.dueDate.toISOString().split("T")[0] %> 
             <% } %> 
           </div>

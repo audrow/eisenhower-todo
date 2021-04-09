@@ -39,15 +39,16 @@
     </div>
   <% } %> 
 
-    <form class="form-inline" action="/toggle-hide-done-todos" method="POST">
-      <button type="submit" class="btn btn-primary mb-2">
-        <% if (isShowDoneTodos) { %> 
-          Hide done
-        <% } else { %> 
-          Show done
-        <% } %> 
-      </button>
-    </form>
+  <form class="form-inline" action="/toggle-hide-done-todos" method="POST">
+    <button type="submit" class="btn btn-primary mb-2">
+      <% if (isShowDoneTodos) { %> 
+        Hide 
+      <% } else { %> 
+        Show 
+      <% } %> 
+      done
+    </button>
+  </form>
 
   <div class="matrix-2d">
     <div class="label-top label-1-1">
