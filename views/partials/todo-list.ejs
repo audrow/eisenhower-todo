@@ -15,11 +15,7 @@
         </div>
         <div>
           <%- await include("./views/partials/todo-complete-button.ejs", { todo: todo }) %> 
-          <form action="/delete-todo/<%= todo._id %>" method="POST">
-            <button type="submit" class="btn btn-primary mb-2">
-              Delete
-            </button>
-          </form>
+          <%- await include("./views/partials/todo-delete-button.ejs", { todo: todo }) %> 
         </div>
       </li>
     </a>
