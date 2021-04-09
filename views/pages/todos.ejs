@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <%- await include("./views/partials/head.ejs", {title: title}) %> 
+  <%- await include("./views/partials/head.ejs", { title }) %> 
   <link rel="stylesheet" type="text/css" href="./assets/styles/matrix2d.css"/>
 </head>
 
@@ -22,6 +22,16 @@
       <label for="is-important">Important?</label>
       <input type="checkbox" name="is-urgent" value="true">
       <label for="is-urgent">Urgent?</label>
+    </div>
+    <div>
+      <label for="label-id">Label:</label>
+      <select name="label-id">
+        <option value="">None</option>
+        <% for (label of labels) { %> 
+          <option value="<%- label._id %>"> <%- label.name %> </option>
+        <% } %> 
+      </select>
+      <a href="/labels">Edit labels</a>
     </div>
     <div>
       <label for="due-date">Due date:</label>

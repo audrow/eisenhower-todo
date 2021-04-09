@@ -4,6 +4,7 @@ import { Collection } from "https://deno.land/x/mongo@v0.22.0/src/collection/col
 interface TodoSchema {
   _id: { $oid: string },
   name: string,
+  labelId: { $oid: string } | undefined,
   isComplete: boolean,
   isImportant: boolean,
   isUrgent: boolean,

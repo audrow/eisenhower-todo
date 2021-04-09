@@ -9,10 +9,13 @@ let isShowDoneTodos = false;
 router.get('/', async (ctx, next) => {
   const todos = await getTodosCollection().aggregate(
     [{$sort: {isComplete: 1, modifiedDate: -1}}]).toArray()
+  const labels = await getLabelCollection().aggregate(
+    [{$sort: {name: 1}}]).toArray()
   const body = await renderFileToString(Deno.cwd() + '/views/pages/todos.ejs', 
     { 
       title: 'My Todos',
       todos,
+      labels,
       isShowDoneTodos,
       error: null,
     })
@@ -26,6 +29,9 @@ router.post('/add-todo', async (ctx, next) => {
   const isImportant: boolean = form.get('is-important') === "true"
   const isUrgent: boolean = form.get('is-urgent') === "true"
 
+  const labelInput = form.get('label-id')!
+  const labelId: string | undefined = (labelInput !== "") ? labelInput : undefined
+
   const dateInput = form.get('due-date')!
   const dueDate: Date | undefined = (dateInput !== "") ? new Date(dateInput) : undefined
 
@@ -34,6 +40,7 @@ router.post('/add-todo', async (ctx, next) => {
   if(newTodoTitle && newTodoTitle.trim().length !== 0) {
     const newTodo = { 
       name: newTodoTitle!,
+      labelId,
       isImportant,
       isUrgent,
       isComplete: false,
