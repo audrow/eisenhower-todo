@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- await include("./views/partials/head.ejs", {title: label.name}) %> 
+</head>
+
+<header>
+  <%- await include("./views/partials/header.ejs") %> 
+</header>
+
+<body>
+  <form action="/update-label/<%= label._id %>" method="POST">
+    <input type="text" name="update-label" value="<%= label.name %>">
+    <button type="submit" class="btn btn-primary mb-2">
+      Update label
+    </button>
+  </form>
+
+  <% if (error) { %> 
+    <div class="alert alert-danger" role="alert">
+      <%= error %> 
+    </div>
+  <% } %> 
+  <%- await include("./views/partials/label-delete-button.ejs", { label: label }) %> 
+
+</body>
+
+<footer>
+  <%- await include("./views/partials/footer.ejs") %> 
+</footer>
+
+</html>

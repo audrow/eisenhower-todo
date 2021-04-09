@@ -1,7 +1,7 @@
 import { Router, send } from "https://deno.land/x/oak/mod.ts"
 import { renderFileToString } from "https://deno.land/x/dejs/mod.ts"
 import { Bson } from "https://deno.land/x/mongo@v0.22.0/mod.ts"
-import getTodosCollection from "../helper/dbs.ts"
+import { getTodosCollection, getLabelCollection } from "../helper/dbs.ts"
 
 const router = new Router()
 let isShowDoneTodos = false;

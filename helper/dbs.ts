@@ -13,7 +13,14 @@ interface TodoSchema {
   completedDate: Date | undefined,
 }
 
+interface LabelSchema {
+  _id: { $oid: string },
+  name: string,
+  createdDate: Date,
+}
+
 let todosCollection: Collection<TodoSchema>
+let labelCollection: Collection<LabelSchema>
 
 export async function connect() {
   const client = new MongoClient()
@@ -21,10 +28,14 @@ export async function connect() {
 
   const db = client.database("todos")
   todosCollection = db.collection<TodoSchema>("todos")
+  labelCollection = db.collection<TodoSchema>("labels")
 }
 
-function getTodosCollection() {
+export function getTodosCollection() {
   return todosCollection
+}
+export function getLabelCollection() {
+  return labelCollection
 }
 
 export default getTodosCollection

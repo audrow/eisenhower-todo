@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- await include("./views/partials/head.ejs", {title: "Your labels"}) %>
+</head>
+
+<header>
+  <%- await include("./views/partials/header.ejs") %>
+</header>
+
+<body>
+  <hr>
+  <form action="/add-label" method="POST">
+    <div>
+      <label for="new-label">Label name:</label>
+      <input type="text" name="new-label">
+    </div>
+    <button type="submit" class="btn btn-primary mb-2">
+      Add Label
+    </button>
+  </form>
+
+  <% if (error) { %>
+    <div class="alert alert-danger" role="alert">
+      <%= error %>
+    </div>
+  <% } %>
+  <hr>
+
+  <h2>Your labels</h2>
+  <ul class="list-group">
+    <% for (label of labels) { %>
+      <a href="/label/<%= label._id %>">
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <div>
+            <%= label.name %>
+          </div>
+          <form action="/delete-label/<%= label._id %>" method="POST">
+            <button type="submit" class="btn btn-primary mb-2">
+              Delete
+            </button>
+          </form>
+        </li>
+      </a>
+      <% } %>
+  </ul>
+</body>
+
+<footer>
+  <%- await include("./views/partials/footer.ejs") %>
+</footer>
+
+</html>
