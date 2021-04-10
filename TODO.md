@@ -12,8 +12,9 @@ Short term
 *[x] Add a due date optional field
 *[x] Allow deletion from the todo list editing screen
 *[x] Show overdue tasks
-*[ ] Add labels
-*[ ] Filter displayed tasks by labels
+*[x] Add labels
+*[ ] Make labels keep track of which tasks have them
+*[ ] Add a list of tasks associated with each label
 
 Medium term
 -----------
