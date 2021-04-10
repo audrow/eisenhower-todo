@@ -1,13 +1,13 @@
-<% if (todo.isComplete) { %> 
+<% if (todo.completedDate) { %>
   <form action="/mark-todo-as-incomplete/<%= todo._id %>" method="POST">
     <button type="submit" class="btn btn-primary mb-2">
       Mark as not done
     </button>
   </form>
-<% } else { %> 
+<% } else { %>
   <form action="/mark-todo-as-complete/<%= todo._id %>" method="POST">
     <button type="submit" class="btn btn-primary mb-2">
       Mark as done
     </button>
   </form>
-<% } %> 
+<% } %>

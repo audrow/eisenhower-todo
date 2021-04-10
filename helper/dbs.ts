@@ -1,7 +1,7 @@
 import { MongoClient } from "https://deno.land/x/mongo@v0.22.0/mod.ts";
 import { Collection } from "https://deno.land/x/mongo@v0.22.0/src/collection/collection.ts"
 
-interface TodoSchema {
+export interface TodoSchema {
   _id: { $oid: string },
   name: string,
   labelId: { $oid: string } | undefined,

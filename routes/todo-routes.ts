@@ -1,25 +1,83 @@
 import { Router, send } from "https://deno.land/x/oak/mod.ts"
 import { renderFileToString } from "https://deno.land/x/dejs/mod.ts"
 import { Bson } from "https://deno.land/x/mongo@v0.22.0/mod.ts"
-import { getTodosCollection, getLabelCollection } from "../helper/dbs.ts"
+import { getTodosCollection, getLabelCollection, TodoSchema } from "../helper/dbs.ts"
 
 const router = new Router()
 let isShowDoneTodos = false;
 
-router.get('/', async (ctx, next) => {
-  const todos = await getTodosCollection().aggregate(
-    [{$sort: {isComplete: 1, modifiedDate: -1}}]).toArray()
+type displayTodo = {
+  name: string,
+  _id: string,
+  label: string | undefined,
+  isImportant: boolean,
+  isUrgent: boolean,
+  dueDate: Date | undefined,
+  completedDate: Date | undefined,
+}
+
+async function getDisplayTodos(todos: TodoSchema[]): Promise<displayTodo[]> {
   const labels = await getLabelCollection().aggregate(
     [{$sort: {name: 1}}]).toArray()
-  const body = await renderFileToString(Deno.cwd() + '/views/pages/todos.ejs', 
-    { 
+
+  const displayTodos: displayTodo[] = []
+  for (const todo of todos) {
+    let labelName: string | undefined = undefined
+    if (todo.labelId) {
+      for (const label of labels) {
+        if (todo.labelId.toString() === label._id.toString()) {
+          labelName = label.name
+        }
+      }
+    }
+    const displayTodo: displayTodo = {
+      name: todo.name,
+      _id: todo._id.toString(),
+      label: labelName,
+      isImportant: todo.isImportant,
+      isUrgent: todo.isUrgent,
+      dueDate: todo.dueDate,
+      completedDate: todo.completedDate,
+    }
+    displayTodos.push(displayTodo)
+  }
+  return displayTodos
+}
+
+async function getTodosPage(error: null | string = null): Promise<string> {
+  const dbTodos = await getTodosCollection().aggregate(
+    [{$sort: {isComplete: 1, modifiedDate: -1}}]).toArray()
+  const todos = await getDisplayTodos(dbTodos)
+  const labels = await getLabelCollection().aggregate(
+    [{$sort: {name: 1}}]).toArray()
+  return await renderFileToString(Deno.cwd() + '/views/pages/todos.ejs',
+    {
       title: 'My Todos',
       todos,
       labels,
       isShowDoneTodos,
-      error: null,
+      error,
     })
-  ctx.response.body = body
+}
+
+async function getTodoPage(todoId: string, error: null | string = null): Promise<string> {
+  const id = new Bson.ObjectId(todoId)
+  const dbTodo = await getTodosCollection().findOne({ _id: id })
+  const todos = await getDisplayTodos([dbTodo!])
+  const labels = await getLabelCollection().aggregate(
+    [{$sort: {name: 1}}]).toArray()
+  if (todos.length !== 1) {
+    throw new Error('Did not find todo')
+  }
+  return await renderFileToString(Deno.cwd()+'/views/pages/todo.ejs', {
+    todo: todos[0],
+    labels,
+    error,
+  })
+}
+
+router.get('/', async (ctx, next) => {
+  ctx.response.body = await getTodosPage(null)
 })
 
 router.post('/add-todo', async (ctx, next) => {
@@ -38,7 +96,7 @@ router.post('/add-todo', async (ctx, next) => {
   const creationDate = new Date()
 
   if(newTodoTitle && newTodoTitle.trim().length !== 0) {
-    const newTodo = { 
+    const newTodo = {
       name: newTodoTitle!,
       labelId,
       isImportant,
@@ -51,19 +109,13 @@ router.post('/add-todo', async (ctx, next) => {
     await getTodosCollection().insertOne(newTodo)
     ctx.response.redirect('/')
   } else {
-    const todos = await getTodosCollection().find().toArray()
-    const body = await renderFileToString(Deno.cwd() + '/views/pages/todos.ejs', {
-      title: 'My Todos',
-      todos,
-      isShowDoneTodos,
-      error: "Field cannot be empty"
-    })
-    ctx.response.body = body
+    ctx.response.body = await getTodosPage("Field cannot be empty")
   }
 })
 
 router.post('/update-todo/:todoId', async (ctx) => {
-  const id = new Bson.ObjectId(ctx.params.todoId!)
+  const todoId = ctx.params.todoId!
+  const id = new Bson.ObjectId(todoId)
   const todo = await getTodosCollection().findOne({_id: id})
   if (!todo) {
     throw new Error('Did not find todo')
@@ -75,6 +127,9 @@ router.post('/update-todo/:todoId', async (ctx) => {
   const isUrgent: boolean = form.get('is-urgent') === "true"
   const isComplete: boolean = form.get('is-complete') === "true"
 
+  const labelInput = form.get('label-id')!
+  const labelId: string | undefined = (labelInput !== "") ? labelInput : undefined
+
   const dateInput = form.get('due-date')!
   const dueDate: Date | undefined = (dateInput !== "") ? new Date(dateInput) : undefined
 
@@ -85,32 +140,30 @@ router.post('/update-todo/:todoId', async (ctx) => {
       isImportant,
       isUrgent,
       isComplete,
+      labelId,
       dueDate,
       modifiedDate: currentDate,
     }})
     if (isComplete) {
-      await getTodosCollection().updateOne({_id: id}, {$set: {
-        completedDate: currentDate,
-      }})
+      await getTodosCollection().updateOne({_id: id}, {$set: { completedDate: currentDate }})
     } else {
-      await getTodosCollection().updateOne({_id: id}, {$unset: {
-        completedDate: "",
-      }})
+      await getTodosCollection().updateOne({_id: id}, {$unset: { completedDate: "" }})
+    }
+    if (labelId) {
+      await getTodosCollection().updateOne({_id: id}, {$set: { labelId }})
+    } else {
+      await getTodosCollection().updateOne({_id: id}, {$unset: { labelId: "" }})
     }
     ctx.response.redirect('/')
   } else {
-    const body = await renderFileToString(Deno.cwd() + '/views/pages/todo.ejs', {
-      todo: todo!,
-      error: "Field cannot be empty",
-    })
-    ctx.response.body = body
+    ctx.response.body = await getTodoPage(todoId, "Field cannot be empty")
   }
 })
 
 router.post('/mark-todo-as-complete/:todoId', async ctx => {
   const id = new Bson.ObjectId(ctx.params.todoId!)
   const currentDate = new Date()
-  await getTodosCollection().updateOne({_id: id}, {$set: { 
+  await getTodosCollection().updateOne({_id: id}, {$set: {
     isComplete: true ,
     completedDate: currentDate,
     modifiedDate: currentDate,
@@ -121,10 +174,10 @@ router.post('/mark-todo-as-complete/:todoId', async ctx => {
 router.post('/mark-todo-as-incomplete/:todoId', async ctx => {
   const id = new Bson.ObjectId(ctx.params.todoId!)
   await getTodosCollection().updateOne({_id: id}, {
-    $set: { 
+    $set: {
       isComplete: false ,
       modifiedDate: new Date(),
-    }, 
+    },
     $unset: {
       completedDate: "",
     },
@@ -150,21 +203,7 @@ router.get('/assets/:path+', async (ctx) => {
 })
 
 router.get('/todo/:todoId', async (ctx) => {
-  const id = new Bson.ObjectId(ctx.params.todoId!)
-  const todo = await getTodosCollection().findOne({ _id: id })
-  if (!todo) {
-    throw new Error('Did not find todo')
-  }
-  const body = await renderFileToString(Deno.cwd()+'/views/pages/todo.ejs', {
-    todo: todo!,
-    error: null,
-  })
-  ctx.response.body = body
-})
-
-router.get('/about', (ctx, next) => {
-  ctx.response.body = `<h1>about</h1>`
-  ctx.response.type = 'text/html'
+  ctx.response.body = await getTodoPage(ctx.params.todoId!, null)
 })
 
 export default router

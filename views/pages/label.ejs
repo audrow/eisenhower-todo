@@ -2,11 +2,11 @@
 <html lang="en">
 
 <head>
-  <%- await include("./views/partials/head.ejs", {title: label.name}) %> 
+  <%- await include("./views/partials/head.ejs", {title: label.name}) %>
 </head>
 
 <header>
-  <%- await include("./views/partials/header.ejs") %> 
+  <%- await include("./views/partials/header.ejs") %>
 </header>
 
 <body>
@@ -17,17 +17,17 @@
     </button>
   </form>
 
-  <% if (error) { %> 
+  <% if (error) { %>
     <div class="alert alert-danger" role="alert">
-      <%= error %> 
+      <%= error %>
     </div>
-  <% } %> 
-  <%- await include("./views/partials/label-delete-button.ejs", { label }) %> 
+  <% } %>
+  <%- await include("./views/partials/label-delete-button.ejs", { label }) %>
 
 </body>
 
 <footer>
-  <%- await include("./views/partials/footer.ejs") %> 
+  <%- await include("./views/partials/footer.ejs") %>
 </footer>
 
 </html>

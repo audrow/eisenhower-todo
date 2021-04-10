@@ -2,36 +2,51 @@
 <html lang="en">
 
 <head>
-  <%- await include("./views/partials/head.ejs", {title: todo.name}) %> 
+  <%- await include("./views/partials/head.ejs", {title: todo.name}) %>
 </head>
 
 <header>
-  <%- await include("./views/partials/header.ejs") %> 
+  <%- await include("./views/partials/header.ejs") %>
 </header>
 
 <body>
   <form action="/update-todo/<%= todo._id %>" method="POST">
-    <input 
+    <input
       type="text" name="update-todo" value="<%= todo.name %>">
     <div>
       <input type="checkbox" name="is-important" value="true"
-       <% if (todo.isImportant) { %> checked <% } %> 
+       <% if (todo.isImportant) { %> checked <% } %>
       >
       <label for="is-important">Important?</label>
       <input type="checkbox" name="is-urgent" value="true"
-       <% if (todo.isUrgent) { %> checked <% } %> 
+       <% if (todo.isUrgent) { %> checked <% } %>
       >
       <label for="is-urgent">Urgent?</label>
       <input type="checkbox" name="is-complete" value="true"
-       <% if (todo.isComplete) { %> checked <% } %> 
+       <% if (todo.isComplete) { %> checked <% } %>
       >
       <label for="is-complete">Done?</label>
     </div>
     <div>
+      <label for="label-id">Label:</label>
+      <select name="label-id">
+        <option value="">None</option>
+        <% for (label of labels) { %>
+          <option value="<%- label._id %>"
+            <% if (label.name === todo.label) { %>
+              selected
+            <% } %>>
+            <%- label.name %>
+          </option>
+        <% } %>
+      </select>
+      <a href="/labels">Edit labels</a>
+    </div>
+    <div>
       <label for="due-date">Due date:</label>
       <input type="date" id="due-date" name="due-date"
-        <% if (todo.dueDate) { %> 
-          value="<%- todo.dueDate.toISOString().split("T")[0] %>" 
+        <% if (todo.dueDate) { %>
+          value="<%- todo.dueDate.toISOString().split("T")[0] %>"
         <% } %>
       >
     </div>
@@ -41,18 +56,18 @@
     </button>
   </form>
 
-  <% if (error) { %> 
+  <% if (error) { %>
     <div class="alert alert-danger" role="alert">
-      <%= error %> 
+      <%= error %>
     </div>
-  <% } %> 
+  <% } %>
 
-  <%- await include("./views/partials/todo-delete-button.ejs", { todo }) %> 
+  <%- await include("./views/partials/todo-delete-button.ejs", { todo }) %>
 
 </body>
 
 <footer>
-  <%- await include("./views/partials/footer.ejs") %> 
+  <%- await include("./views/partials/footer.ejs") %>
 </footer>
 
 </html>

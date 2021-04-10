@@ -1,24 +1,31 @@
 <ul class="list-group">
-  <% for (todo of todos) { if (isShowDoneTodos || !todo.isComplete) { %>
+  <% for (todo of todos) { if (isShowDoneTodos || !todo.completedDate) { %>
     <a href="/todo/<%= todo._id %>">
       <li class="list-group-item d-flex justify-content-between align-items-center">
         <div>
-          <%= todo.name %>
           <div>
-            <% if (todo.isComplete) { %> 
-              DONE on 
-              <%= todo.completedDate.toISOString().split("T")[0] %> 
-            <% } else if (todo.dueDate) { %> 
-              <% if (new Date > todo.dueDate) { %> 
-                (Overdue)
-              <% } %> 
-              <%= todo.dueDate.toISOString().split("T")[0] %> 
-            <% } %> 
+            <%= todo.name %>
           </div>
+          <div>
+            <% if (todo.completedDate) { %>
+              DONE on
+              <%= todo.completedDate.toISOString().split("T")[0] %>
+            <% } else if (todo.dueDate) { %>
+              <% if (new Date > todo.dueDate) { %>
+                (Overdue)
+              <% } %>
+              <%= todo.dueDate.toISOString().split("T")[0] %>
+            <% } %>
+          </div>
+          <% if (todo.label) { %>
+            <div>
+              <%- todo.label %>
+            </div>
+          <% } %>
         </div>
         <div>
-          <%- await include("./views/partials/todo-complete-button.ejs", { todo }) %> 
-          <%- await include("./views/partials/todo-delete-button.ejs", { todo }) %> 
+          <%- await include("./views/partials/todo-complete-button.ejs", { todo }) %>
+          <%- await include("./views/partials/todo-delete-button.ejs", { todo }) %>
         </div>
       </li>
     </a>

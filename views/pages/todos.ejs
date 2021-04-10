@@ -2,12 +2,12 @@
 <html lang="en">
 
 <head>
-  <%- await include("./views/partials/head.ejs", { title }) %> 
+  <%- await include("./views/partials/head.ejs", { title }) %>
   <link rel="stylesheet" type="text/css" href="./assets/styles/matrix2d.css"/>
 </head>
 
 <header>
-  <%- await include("./views/partials/header.ejs") %> 
+  <%- await include("./views/partials/header.ejs") %>
 </header>
 
 <body>
@@ -27,9 +27,9 @@
       <label for="label-id">Label:</label>
       <select name="label-id">
         <option value="">None</option>
-        <% for (label of labels) { %> 
+        <% for (label of labels) { %>
           <option value="<%- label._id %>"> <%- label.name %> </option>
-        <% } %> 
+        <% } %>
       </select>
       <a href="/labels">Edit labels</a>
     </div>
@@ -43,19 +43,19 @@
   </form>
   <hr>
 
-  <% if (error) { %> 
+  <% if (error) { %>
     <div class="alert alert-danger" role="alert">
-      <%= error %> 
+      <%= error %>
     </div>
-  <% } %> 
+  <% } %>
 
   <form class="form-inline" action="/toggle-hide-done-todos" method="POST">
     <button type="submit" class="btn btn-primary mb-2">
-      <% if (isShowDoneTodos) { %> 
-        Hide 
-      <% } else { %> 
-        Show 
-      <% } %> 
+      <% if (isShowDoneTodos) { %>
+        Hide
+      <% } else { %>
+        Show
+      <% } %>
       done
     </button>
   </form>
@@ -77,31 +77,31 @@
       <%- await include('./views/partials/todo-list.ejs', {
         todos: todos.filter(todo => todo.isImportant && todo.isUrgent),
         isShowDoneTodos
-      }) %> 
+      }) %>
     </div>
     <div class="content content-1-2">
       <%- await include('./views/partials/todo-list.ejs', {
         todos: todos.filter(todo => !todo.isImportant && todo.isUrgent),
         isShowDoneTodos
-      }) %> 
+      }) %>
     </div>
     <div class="content content-2-1">
       <%- await include('./views/partials/todo-list.ejs', {
         todos: todos.filter(todo => todo.isImportant && !todo.isUrgent),
         isShowDoneTodos
-      }) %> 
+      }) %>
     </div>
     <div class="content content-2-2">
       <%- await include('./views/partials/todo-list.ejs', {
         todos: todos.filter(todo => !todo.isImportant && !todo.isUrgent),
         isShowDoneTodos
-      }) %> 
+      }) %>
     </div>
   </div>
 </body>
 
 <footer>
-  <%- await include("./views/partials/footer.ejs") %> 
+  <%- await include("./views/partials/footer.ejs") %>
 </footer>
 
 </html>
