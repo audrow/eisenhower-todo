@@ -20,6 +20,10 @@ Here are some notes on functions that are likely to be useful:
   ```
   db.test.aggregate([{$match: {_id: ObjectId("607917a4823c4edab2757214")}}, {$lookup: {from: "labels", localField: "labels", foreignField: "_id", as: "labelInfo"}}]).pretty()
   ```
+  Or you can get just the fields that you want with `$project`:
+  ```
+  db.test.aggregate([{$match: {_id: ObjectId("607917a4823c4edab2757214")}}, {$lookup: {from: "labels", localField: "labels", foreignField: "_id", as: "labelInfo"}}, {$project: {name: 1, labelInfo: {name:1, _id: 1}}}]).pretty()
+  ```
 
 * I can find all entries with a specific label as follows:
   ```
