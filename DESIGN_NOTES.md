@@ -4,6 +4,8 @@ DESIGN_NOTES
 2021-04-15: Many-to-many todos and tags
 ---------------------------------------
 
+> See `scratch/many-tags-to-one-todo.ts` for implementation
+
 I would like to enable a many-to-many relationship between the todos and tags (formerly, "labels").
 The reasons for this are as follows:
 * I can select multiple tags per todo, which makes sense when todos don't fit neatly into one tag
