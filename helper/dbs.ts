@@ -29,7 +29,7 @@ export async function connect() {
 
   const db = client.database("todos")
   todosCollection = db.collection<TodoSchema>("todos")
-  labelCollection = db.collection<TodoSchema>("labels")
+  labelCollection = db.collection<LabelSchema>("labels")
 }
 
 export function getTodosCollection() {
