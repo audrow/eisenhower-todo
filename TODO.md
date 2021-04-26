@@ -13,12 +13,14 @@ Short term
 *[x] Allow deletion from the todo list editing screen
 *[x] Show overdue tasks
 *[x] Add labels
+*[ ] Update data structure to allow for many tags per todo
+*[ ] Add tests
 *[ ] Make labels keep track of which tasks have them
 *[ ] Add a list of tasks associated with each label
 
 Medium term
 -----------
-*[ ] Add tags, such as "Open Robotics" to todos - and allow filtering
+*[ ] Allow filtering by labels
 *[ ] Store list order in the database
 *[ ] Make columns work with different view widths
 *[ ] Allow todos to be reordered
