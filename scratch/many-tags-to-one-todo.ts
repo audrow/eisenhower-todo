@@ -18,6 +18,19 @@ interface TodoSchema {
   }[],
 }
 
+interface DisplayTodo {
+  _id: { $oid: string },
+  name: string,
+  dueDate: Date | undefined,
+  isImportant: boolean,
+  isUrgent: boolean,
+  isComplete: boolean,
+  tags: undefined | {
+    _id: { $oid: string },
+    name: string,
+  }[],
+}
+
 interface TagSchema {
   _id: { $oid: string },
   name: string,
@@ -94,7 +107,7 @@ const displayTodos = await todoCollection.aggregate(
 )
 
 
-const displayTodo = await displayTodos.next()
+const displayTodo = await displayTodos.next() as DisplayTodo
 //console.log(displayTodo)
 
 console.log(displayTodo!.tags![0])
