@@ -7,7 +7,11 @@
     "start": "next start",
     "prettier": "prettier --ignore-path .gitignore \"**/*.(js|jsx|json|yml|yaml|css|ts|tsx|md|mdx)\"",
     "format": "npm run prettier -- --write",
-    "lint": "next lint"
+    "lint": "next lint",
+    "cypress": "cypress open",
+    "cypress:headless": "cypress run",
+    "e2e": "start-server-and-test start http://localhost:3000 cypress",
+    "e2e:headless": "start-server-and-test start http://localhost:3000 cypress:headless"
   },
   "dependencies": {
     "next": "12.0.10",
@@ -18,11 +22,13 @@
     "@types/node": "17.0.18",
     "@types/react": "17.0.39",
     "autoprefixer": "^10.4.2",
+    "cypress": "^9.5.0",
     "eslint": "8.9.0",
     "eslint-config-next": "12.0.10",
     "eslint-config-prettier": "^8.3.0",
     "postcss": "^8.4.6",
     "prettier-plugin-organize-imports": "^2.3.4",
+    "start-server-and-test": "^1.14.0",
     "tailwindcss": "^3.0.23",
     "typescript": "4.5.5"
   }
