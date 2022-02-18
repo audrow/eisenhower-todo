@@ -52,10 +52,10 @@ context('Assertions', () => {
     it('expect - make an assertion about a specified subject', () => {
       // We can use Chai's BDD style assertions
       expect(true).to.be.true
-      const o = { foo: 'bar' }
+      const o = {foo: 'bar'}
 
       expect(o).to.equal(o)
-      expect(o).to.deep.equal({ foo: 'bar' })
+      expect(o).to.deep.equal({foo: 'bar'})
       // matching text using regular expression
       expect('FooBar').to.match(/bar$/i)
     })
@@ -129,14 +129,14 @@ context('Assertions', () => {
       /**
        * Text from the first element.
        * @type {string}
-      */
+       */
       let text
 
       /**
        * Normalizes passed text,
        * useful before comparing text with spaces and different capitalization.
        * @param {string} s Text to normalize
-      */
+       */
       const normalizeText = (s) => s.replace(/\s/g, '').toLowerCase()
 
       cy.get('.two-elements')
@@ -166,12 +166,11 @@ context('Assertions', () => {
     })
 
     it('retries the should callback until assertions pass', () => {
-      cy.get('#random-number')
-        .should(($div) => {
-          const n = parseFloat($div.text())
+      cy.get('#random-number').should(($div) => {
+        const n = parseFloat($div.text())
 
-          expect(n).to.be.gte(1).and.be.lte(10)
-        })
+        expect(n).to.be.gte(1).and.be.lte(10)
+      })
     })
   })
 })
